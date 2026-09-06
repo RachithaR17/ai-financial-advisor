@@ -7,7 +7,7 @@ def build_cohort_stats(df, category_cols=CATEGORY_COLS):
     """Precompute mean/std spending per City_Tier + Income_Bracket cohort."""
     df = df.copy()
     df['Income_Bracket'] = pd.qcut(df['Income'], q=4, labels=['Low', 'Mid-Low', 'Mid-High', 'High'])
-    cohort_stats = df.groupby(['City_Tier', 'Income_Bracket'])[category_cols].agg(['mean', 'std'])
+    cohort_stats = df.groupby(['City_Tier', 'Income_Bracket'], observed=True)[category_cols].agg(['mean', 'std'])
     return df, cohort_stats
 
 def benchmark_user(user_row, cohort_stats, category_cols=CATEGORY_COLS):
@@ -27,4 +27,3 @@ def benchmark_user(user_row, cohort_stats, category_cols=CATEGORY_COLS):
             'z_score': round(z, 2)
         }
     return results
-    
